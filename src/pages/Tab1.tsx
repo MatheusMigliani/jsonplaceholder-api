@@ -1,22 +1,46 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import React, { useEffect, useState } from "react";
+import {
+  IonCard,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonText,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import { getPosts } from "../services/api";
 
-const Tab1: React.FC = () => {
+const Tab1 = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getPosts();
+      setPosts(data);
+    };
+
+    fetchPosts();
+  }, []);
+
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+    <IonPage color={"dark"}>
+      <IonHeader color={"dark"}>
+        <IonToolbar color={"dark"}>
+          <IonTitle className="ion-text-center" color={"success"}>
+            Posts
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+      <IonContent fullscreen className="ion-text-center">
+        {posts.map((post) => (
+          <IonCard color={"success"} className="ion-padding">
+            <div key={post.id}>
+              <IonText color={'dark'}>
+              <h2 color="dark">{post.title}</h2>
+              <p>{post.body}</p></IonText>
+            </div>
+          </IonCard>
+        ))}
       </IonContent>
     </IonPage>
   );
